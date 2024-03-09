@@ -45,7 +45,7 @@ const RunningScreen = () => {
   //main code, the map, buttons and stats which will appear on screen
   return (
     <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.container}>
+        <View style={styles.mapContainer}>
           <MapView
             style={styles.mapStyle}
             //initialRegion that the map will appear in, currently in San Francisco lol, this will be changed to the users current location once i have that working 
@@ -71,8 +71,9 @@ const RunningScreen = () => {
       {showStats && (
         //if showStats is true(this meaning the Start Run button has been clicked) then Time and Distance will be displayed
       <View style={styles.statsContainer}>
-        <Text style={styles.statsText}>Time: {elapsedTime} s</Text>
-        <Text style={styles.statsText}>Distance: {distance} km</Text>
+        <Text style={styles.statsText}>Time: {Math.floor(elapsedTime / 60).toFixed(0)} mins {Math.floor(elapsedTime % 60).toFixed(0)} secs</Text>
+        <Text style={styles.statsText}>Distance: {distance.toFixed(2)} km</Text>
+        <Text style={styles.statsText}>Speed: {(distance / (elapsedTime / 3600)).toFixed(2)} km/hr</Text>
       </View>
       )}
     </SafeAreaView>
@@ -81,92 +82,102 @@ const RunningScreen = () => {
 export default RunningScreen;
 //styles
 const mapStyle = [
-  {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
-  {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
-  {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
   {
-    featureType: 'administrative.locality',
+    elementType: 'geometry',
+    stylers: [{ color: '#f0f0f0' }],
+  },
+  {
+    elementType: 'labels.icon',
+    stylers: [{ visibility: 'off' }],
+  },
+  {
     elementType: 'labels.text.fill',
-    stylers: [{color: '#d59563'}],
+    stylers: [{ color: '#333333' }],
+  },
+  {
+    elementType: 'labels.text.stroke',
+    stylers: [{ color: '#f0f0f0' }],
+  },
+  {
+    featureType: 'administrative.land_parcel',
+    elementType: 'labels.text.fill',
+    stylers: [{ color: '#666666' }],
+  },
+  {
+    featureType: 'poi',
+    elementType: 'geometry',
+    stylers: [{ color: '#dcdcdc' }],
   },
   {
     featureType: 'poi',
     elementType: 'labels.text.fill',
-    stylers: [{color: '#d59563'}],
+    stylers: [{ color: '#333333' }],
   },
   {
     featureType: 'poi.park',
     elementType: 'geometry',
-    stylers: [{color: '#263c3f'}],
+    stylers: [{ color: '#c0e7d2' }],
   },
   {
     featureType: 'poi.park',
     elementType: 'labels.text.fill',
-    stylers: [{color: '#6b9a76'}],
+    stylers: [{ color: '#6b9a76' }],
   },
   {
     featureType: 'road',
     elementType: 'geometry',
-    stylers: [{color: '#38414e'}],
+    stylers: [{ color: '#f5f5f5' }],
   },
   {
-    featureType: 'road',
-    elementType: 'geometry.stroke',
-    stylers: [{color: '#212a37'}],
-  },
-  {
-    featureType: 'road',
+    featureType: 'road.arterial',
     elementType: 'labels.text.fill',
-    stylers: [{color: '#9ca5b3'}],
+    stylers: [{ color: '#333333' }],
   },
   {
     featureType: 'road.highway',
     elementType: 'geometry',
-    stylers: [{color: '#746855'}],
-  },
-  {
-    featureType: 'road.highway',
-    elementType: 'geometry.stroke',
-    stylers: [{color: '#1f2835'}],
+    stylers: [{ color: '#e5e5e5' }],
   },
   {
     featureType: 'road.highway',
     elementType: 'labels.text.fill',
-    stylers: [{color: '#f3d19c'}],
+    stylers: [{ color: '#333333' }],
   },
   {
-    featureType: 'transit',
+    featureType: 'road.local',
+    elementType: 'labels.text.fill',
+    stylers: [{ color: '#666666' }],
+  },
+  {
+    featureType: 'transit.line',
     elementType: 'geometry',
-    stylers: [{color: '#2f3948'}],
+    stylers: [{ color: '#c0c0c0' }],
   },
   {
     featureType: 'transit.station',
-    elementType: 'labels.text.fill',
-    stylers: [{color: '#d59563'}],
+    elementType: 'geometry',
+    stylers: [{ color: '#dcdcdc' }],
   },
   {
     featureType: 'water',
     elementType: 'geometry',
-    stylers: [{color: '#17263c'}],
+    stylers: [{ color: '#a2daf2' }],
   },
   {
     featureType: 'water',
     elementType: 'labels.text.fill',
-    stylers: [{color: '#515c6d'}],
-  },
-  {
-    featureType: 'water',
-    elementType: 'labels.text.stroke',
-    stylers: [{color: '#17263c'}],
+    stylers: [{ color: '#333333' }],
   },
 ];
 const styles = StyleSheet.create({
-  container: {
+  mapContainer: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
+    borderColor: 'black', 
+    borderWidth: 1,
     height: Dimensions.get('window').height * 0.5,
     margin: 10,
     alignItems: 'center',
@@ -188,9 +199,9 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#1ba5c4',
-    width: Dimensions.get('window').width * 0.6,
+    width: Dimensions.get('window').width * 0.5,
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 20,
   },
   buttonText: {
     color: 'white',
