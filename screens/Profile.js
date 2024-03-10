@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import {Text, View, Image, Button, TextInput} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 
 const ProfileScreen = () => {
     const [image, setImage] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
-    const [name, setName] = useState('John Doe');
-    const [email, setEmail] = useState('email@email.com');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [pronoun, setPronouns] = useState('');
 
     const selectImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -83,6 +85,23 @@ const ProfileScreen = () => {
             ) : (
                 <Text style={styles.detail}>Email: {email}</Text>
             )}
+            {isEditing ? (
+                <Picker
+                    selectedValue={pronoun}
+                    onValueChange={(itemValue) => setPronouns(itemValue)}>
+
+                    <Picker.Item label="He/Him" value="He/Him" />
+                    <Picker.Item label="She/Her" value="She/Her" />
+                    <Picker.Item label="They/Them" value="They/Them" />
+                    <Picker.Item label="Other" value="Other" />
+
+
+
+            </Picker>
+            ) : (
+                <Text style={styles.detail}>Pronouns: {pronoun}</Text>
+            )}
+
 
             <View style={styles.profileInfo}>
                 {isEditing ? (
