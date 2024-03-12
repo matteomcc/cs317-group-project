@@ -1,0 +1,31 @@
+.screen {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--background-color);
+    transition: background-color 250ms ease-in-out;
+}
+
+h1{
+    color: var(--primary-text-color);
+}
+
+p{
+    color: var(--primary-text-color);
+}
+
+:root{
+    --background-color:white;
+    --primary-text-color:black;
+    --toggle-background:#f0eb9d;
+    --toggle-foreground:#ffd000;
+}
+
+[data-theme="dark"] {
+    --background-color:black;
+    --primary-text-color:white;
+    --toggle-background:#283452;
+    --toggle-foreground:#00a6ff;
+}
