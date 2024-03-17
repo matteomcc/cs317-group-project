@@ -1,6 +1,8 @@
 import * as React from 'react';
-import {Text, View, Button, Picker, TextInput} from 'react-native';
-import { useState } from 'react';
+import {Text, View, Button,  TextInput} from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import {useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function WeightsScreen() {
     const [exercise, setExercise] = useState('0');
@@ -15,6 +17,30 @@ function WeightsScreen() {
         ['FRI', ['', 0], ['', 0], ['', 0], ['', 0], ['', 0]],
         ['SAT', ['', 0], ['', 0], ['', 0], ['', 0], ['', 0]]
     ]);
+
+    useEffect(() => {
+        getData();
+    }, []);
+
+    const getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('myArray');
+            if (value !== null) {
+                setMyArray(JSON.parse(value));
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const storeData = async (value) => {
+        try {
+            const jsonValue = JSON.stringify(value);
+            await AsyncStorage.setItem('myArray', jsonValue);
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     function addExer() {
         let changed = false;
@@ -81,9 +107,17 @@ function WeightsScreen() {
     };
 
     const editWeight = (target, weight) => {
+        if(!isNaN(weight)){
         const newArray = [...myArray];
         newArray[day][target][1] = weight;
         setMyArray(newArray);
+        storeData(newArray);
+        }else{
+                const newArray = [...myArray];
+                newArray[day][target][1] = '0';
+                setMyArray(newArray);
+                storeData(newArray);
+            }
     }
 
     return (
@@ -94,10 +128,11 @@ function WeightsScreen() {
                 <Button title=">" onPress={rClickMe} />
             </View>
             <View style={{ marginHorizontal: '30%' }}>
+
                 <Picker
                     selectedValue={exercise}
                     onValueChange={(itemValue, itemIndex) => setExercise(itemValue)}>
-                    <Picker.Item label="Select an exercise" value="0" />
+
                     <Picker.Item label="Bench Press" value="1" />
                     <Picker.Item label="Deadlift" value="2" />
                     <Picker.Item label="Squat" value="3" />
@@ -110,6 +145,7 @@ function WeightsScreen() {
                             value={myArray[day][item][1].toString()}
                             onChangeText={(text) => editWeight(item, parseInt(text))}
                             style={{width:50}}
+                            keyboardType={'numeric'}
                         />
                         <Text>{myArray[day][item][1] + "kg " +  myArray[day][item][0]}</Text>
                         <Button onPress={() => remExer(item)} title="-" />

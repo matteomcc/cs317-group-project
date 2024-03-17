@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Text, View, Image, Button, TextInput} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = () => {
