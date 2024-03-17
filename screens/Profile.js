@@ -97,7 +97,7 @@ const ProfileScreen = () => {
 
 
 
-            </Picker>
+                </Picker>
             ) : (
                 <Text style={styles.detail}>Pronouns: {pronoun}</Text>
             )}
