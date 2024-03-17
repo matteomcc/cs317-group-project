@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {Text, View, Image, Button, TextInput} from 'react-native';
-import {Picker} from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -75,7 +74,7 @@ const ProfileScreen = () => {
 
     const handleSave = () => {
         setIsEditing(false);
-        storeData().then(r => console.log('Data saved!'));
+        storeData().then( );
 
     };
     return (
