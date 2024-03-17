@@ -1,33 +1,26 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import { useDarkMode } from './DarkModeContext';
-import { useAutoBright } from './AutoBrightContext'
-import "./screens"
+import { useAutoBright } from './AutoBrightContext';
 
 const RunningScreen = () => {
   const { isDark } = useDarkMode();
 
-  const { isAutoBright } = useAutoBright();
-
-  if (isAutoBright) {
-    const sensor = new AmbientLightSensor();
-    sensor.addEventListener("reading", (event) => {
-      console.log("Current light level:", sensor.illuminance);
-    });
-    sensor.addEventListener("error", (event) => {
-      console.log(event.error.name, event.error.message);
-    });
-    sensor.start();
-  }
-  
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: isDark ? '#000' : '#fff',
+    },
+    text: {
+      color: isDark ? '#fff' : '#000',
+    },
+  });
 
   return (
-    <View>
-      <div className='screen' data-theme={isDark ? 'dark' : 'light'}>
-        <Text>
-          <h1 className='title'>Running Screen</h1>
-        </Text>
-      </div>
+    <View style={styles.container}>
+        <Text style={styles.text}>Running Screen</Text>
     </View>
   );
 };
