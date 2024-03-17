@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View, Image, Button, TextInput} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = () => {
     const [image, setImage] = useState(null);
@@ -9,6 +10,47 @@ const ProfileScreen = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [pronoun, setPronouns] = useState('');
+
+    useEffect(() => {
+        getData();
+    }, []);
+
+    const getData = async () => {
+        try {
+            const name = await AsyncStorage.getItem('name');
+            const email = await AsyncStorage.getItem('email');
+            const pronoun = await AsyncStorage.getItem('pronoun');
+            const imageUri = await AsyncStorage.getItem('imageUri'); // Retrieve image URI
+            if (name !== null) {
+                setName(name);
+            }
+            if (email !== null) {
+                setEmail(email);
+            }
+            if (pronoun !== null) {
+                setPronouns(pronoun);
+            }
+            if (imageUri !== null) {
+                setImage(imageUri); // Set the image URI to state
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const storeData = async () => {
+        try {
+            await AsyncStorage.setItem('name', name);
+            await AsyncStorage.setItem('email', email);
+            await AsyncStorage.setItem('pronoun', pronoun);
+            if (image) {
+                await AsyncStorage.setItem('imageUri', image); // Save image URI
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
 
     const selectImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -33,6 +75,7 @@ const ProfileScreen = () => {
 
     const handleSave = () => {
         setIsEditing(false);
+        storeData().then(r => console.log('Data saved!'));
 
     };
     return (
@@ -48,7 +91,9 @@ const ProfileScreen = () => {
                 />
             )}
 
-            <Button title="Choose a profile picture!" onPress={selectImage} />
+            {isEditing ? (
+                    <Button title="Choose a profile picture!" onPress={selectImage} />
+            ) : null}
 
             {isEditing ? (
                 <TextInput
