@@ -1,13 +1,12 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { useDarkMode } from './DarkModeContext';
-//import { useAutoBright } from './AutoBrightContext'
+import { useAutoBright } from './AutoBrightContext'
 import "./screens"
 
 const RunningScreen = () => {
   const { isDark } = useDarkMode();
 
-  /*
   const { isAutoBright } = useAutoBright();
 
   if (isAutoBright) {
@@ -20,7 +19,7 @@ const RunningScreen = () => {
     });
     sensor.start();
   }
-  */
+  
 
   return (
     <View>

@@ -12,13 +12,13 @@ import RunningScreen from './screens/Running';
 import WeightsScreen from './screens/Weights';
 import SettingsScreen from './screens/Settings';
 import { DarkModeProvider } from './screens/DarkModeContext';
-//import { AutoBrightProvider } from './screens/AutoBrightContext';
+import { AutoBrightProvider } from './screens/AutoBrightContext';
 
 const Drawer = createDrawerNavigator();
 
 export default function App() {
   return (
-    //<AutoBrightProvider>
+    <AutoBrightProvider>
       <DarkModeProvider>
         <NavigationContainer>
           <Drawer.Navigator initialRouteName="Home">
@@ -31,6 +31,6 @@ export default function App() {
           <StatusBar style="auto" />
         </NavigationContainer>
       </DarkModeProvider>
-    //</AutoBrightProvider>
+    </AutoBrightProvider>
   );
 }

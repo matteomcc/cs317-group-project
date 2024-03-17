@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { Toggle1, Toggle2 } from './components/Toggle';
 import { useDarkMode } from './DarkModeContext';
-//import { useAutoBright } from './AutoBrightContext'
+import { useAutoBright } from './AutoBrightContext'
 import "./screens"
 
 const SettingsScreen = () => {
