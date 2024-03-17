@@ -10,27 +10,28 @@ const SettingsScreen = () => {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      alignItems: 'right',
       justifyContent: 'top',
-      backgroundColor: isDark ? '#000' : '#fff',
+      backgroundColor: isDark ? '#191919' : '#fff',
     },
     text: {
       color: isDark ? '#fff' : '#000',
       fontSize: 18,
       marginBottom: 5,
       marginHorizontal: 5,
+      textAlign:'left'
     },
     heading: {
       color: isDark ? '#fff' : '#000',
       fontSize: 24,
       marginBottom: 10,
       marginHorizontal: 10,
+      textAlign:'center'
     }
   });
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>
+      <Text style={styles.heading}>
         Update your setting here!
       </Text>
       <Text style={styles.text}>Dark Mode</Text>
