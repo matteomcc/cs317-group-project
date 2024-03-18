@@ -9,7 +9,7 @@ import { useLargeText } from './LargeTextContext';
 const WeightsScreen = () => {
     const { isDark } = useDarkMode();
     const { isLargeText } = useLargeText();
-    const [exercise, setExercise] = useState('0');
+    const [exercise, setExercise] = useState('1');
     const [num, setNum] = useState(0);
     const [day, setDay] = useState(0);
     const [myArray, setMyArray] = useState([
@@ -189,6 +189,7 @@ const WeightsScreen = () => {
                         <Button onPress={() => remExer(item)} title="-" />
                     </View>
                 ))}
+                <Text>*You must enter a weight value to save your exercises*</Text>
             </View>
         </View>
     );
