@@ -3,8 +3,9 @@ import {Text, View, Image, Button, TextInput} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Dimensions from 'react-native/Libraries/Utilities/Dimensions';
 
-const ProfileScreen = () => {
+const ProfileScreen = (props) => {
     const [image, setImage] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState('');
@@ -12,15 +13,24 @@ const ProfileScreen = () => {
     const [pronoun, setPronouns] = useState('');
 
     useEffect(() => {
+
         getData();
     }, []);
 
+    useEffect(() => {
+        props.setProfileImageUri(image);
+    }, [image]);
     const getData = async () => {
         try {
             const name = await AsyncStorage.getItem('name');
             const email = await AsyncStorage.getItem('email');
             const pronoun = await AsyncStorage.getItem('pronoun');
-            const imageUri = await AsyncStorage.getItem('imageUri'); // Retrieve image URI
+            let imageUri = await AsyncStorage.getItem('imageUri');
+
+            if(!imageUri){
+                imageUri = require('../assets/profile.png');
+            }
+
             if (name !== null) {
                 setName(name);
             }
@@ -31,7 +41,7 @@ const ProfileScreen = () => {
                 setPronouns(pronoun);
             }
             if (imageUri !== null) {
-                setImage(imageUri); // Set the image URI to state
+                setImage(imageUri);
             }
         } catch (e) {
             console.log(e);
@@ -44,7 +54,7 @@ const ProfileScreen = () => {
             await AsyncStorage.setItem('email', email);
             await AsyncStorage.setItem('pronoun', pronoun);
             if (image) {
-                await AsyncStorage.setItem('imageUri', image); // Save image URI
+                await AsyncStorage.setItem('imageUri', image);
             }
         } catch (e) {
             console.log(e);
@@ -75,11 +85,14 @@ const ProfileScreen = () => {
 
     const handleSave = () => {
         setIsEditing(false);
-        storeData().then( );
+        storeData().then(() => {
+            props.setProfileImageUri(image);
+        } );
 
     };
     return (
         <View>
+
             <Text style={styles.heading}>Manage your profile</Text>
 
             {image ? (
@@ -167,9 +180,7 @@ const styles = {
         marginHorizontal: 10,
 
     },
-    profileInfo: {
-        marginVertical: 10,
-    },
+
     detail: {
         marginHorizontal : 10,
         fontSize: 18,
@@ -178,6 +189,11 @@ const styles = {
         width: 100,
         height: 100,
         borderRadius: 50,
+        marginVertical: 10,
+        alignSelf: 'center',
+    },
+    profileInfo: {
+        width: Dimensions.get('window').width * 0.4,
         marginVertical: 10,
         alignSelf: 'center',
     },
