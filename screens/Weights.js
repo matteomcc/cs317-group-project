@@ -189,7 +189,7 @@ const WeightsScreen = () => {
                         <Button onPress={() => remExer(item)} title="-" />
                     </View>
                 ))}
-                <Text>*You must enter a weight value to save your exercises*</Text>
+                <Text style = {styles.text}>*You must enter a weight value to save your exercises*</Text>
             </View>
         </View>
     );
