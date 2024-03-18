@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, View, Text, Button, Alert, Dimensions, TouchableOpacity, PermissionsAndroid, Platform } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text, Button, Alert, Dimensions, TouchableOpacity, Image } from 'react-native';
 import MapView, { Marker, AnimatedRegion, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 
-const LATITUDE_DELTA = 0.009;
-const LONGITUDE_DELTA = 0.009;
+const LATITUDE_DELTA = 0.0001;
+const LONGITUDE_DELTA = 0.0001;
 
 function RunningScreen() {
   const [showStats, setStats] = useState(false);
@@ -12,8 +12,10 @@ function RunningScreen() {
   const [timer, setTimer] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [distance, setDis] = useState(0);
-  const [LATITUDE, setLAT] = useState(37.78825);
-  const [LONGITUDE, setLONG] = useState(-122.4324);
+  const [LATITUDE, setLAT] = useState(39.0973);
+  const [LONGITUDE, setLONG] = useState(-82.9860);
+  const [startLAT, setSLAT] = useState(null);
+  const [startLONG, setSLONG] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [locationInterval, setLocationInterval] = useState(null);
 
@@ -24,28 +26,48 @@ function RunningScreen() {
         setErrorMsg('Permission to access location was denied');
         return;
       }
-
       let location = await Location.getCurrentPositionAsync({});
       setLAT(location.coords.latitude);
       setLONG(location.coords.longitude);
+      setSLAT(location.coords.latitude);
+      setSLONG(location.coords.longitude);
       setStartStop("Stop Run");
       setStats(true);
       startTimer();
-
-
     } else {
       setStartStop("Start Run");
       setStats(false);
       stopTimer();
+      let location = await Location.getCurrentPositionAsync({});
+      let distance = calculateDistance(startLAT, startLONG, location.coords.latitude, location.coords.longitude);
+      Alert.alert(
+        'Run Completed',
+        `Time: ${Math.floor(elapsedTime / 60).toFixed(0)} mins ${Math.floor(elapsedTime % 60).toFixed(0)} secs\nDistance between your start point and end point: ${distance.toFixed(2)} km`,
+        [
+          { text: 'OK', onPress: () => console.log('OK Pressed') }
+        ],
+        { cancelable: false }
+      );
     }
   };
+
+  const help = () => {
+    Alert.alert(
+      'Help',
+      `Press the 'Start Run' button to start tracking your exercise, your location and time will be tracked until the button is pressed again where you will then recieve data about your workout, enjoy!`,
+      [
+        { text: 'OK', onPress: () => console.log('OK Pressed') }
+      ],
+      { cancelable: false }
+    );
+  }
 
   const startTimer = () => {
     const interval = setInterval(() => {
       setElapsedTime(prevElapsedTime => prevElapsedTime + 1);
     }, 1000);
     setTimer(interval);
-    const locInterval = setInterval(fetchLocation, 2000);
+    const locInterval = setInterval(fetchLocation, 1000);
     setLocationInterval(locInterval);
   };
 
@@ -56,11 +78,27 @@ function RunningScreen() {
   };
 
   const fetchLocation = async () => {
-    console.log("balls");
     let location = await Location.getCurrentPositionAsync({});
     setLAT(location.coords.latitude);
     setLONG(location.coords.longitude);
   };
+
+  //code in calculateDistance sourced from https://www.movable-type.co.uk/scripts/latlong.html
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371e3; // metres
+  const φ1 = lat1 * Math.PI / 180; // φ, λ in radians
+  const φ2 = lat2 * Math.PI / 180;
+  const Δφ = (lat2 - lat1) * Math.PI / 180;
+  const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+  const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+      Math.cos(φ1) * Math.cos(φ2) *
+      Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  const d = (R * c)/1000; // in metres
+  return d;
+}
 
 
   useEffect(() => {
@@ -72,7 +110,7 @@ function RunningScreen() {
       <View style={styles.mapContainer}>
         <MapView
           style={styles.mapStyle}
-          initialRegion={{
+          region={{
             latitude: LATITUDE,
             longitude: LONGITUDE,
             latitudeDelta: LATITUDE_DELTA,
@@ -102,10 +140,16 @@ function RunningScreen() {
       {showStats && (
         <View style={styles.statsContainer}>
           <Text style={styles.statsText}>Time: {Math.floor(elapsedTime / 60).toFixed(0)} mins {Math.floor(elapsedTime % 60).toFixed(0)} secs</Text>
-          <Text style={styles.statsText}>Distance: {distance.toFixed(2)} km</Text>
-          <Text style={styles.statsText}>Speed: {(distance / (elapsedTime / 3600)).toFixed(2)} km/hr</Text>
         </View>
       )}
+      <View style={styles.helpButtonContainer}>
+        <TouchableOpacity
+          onPress={help}
+          style={styles.helpButton}
+        >
+          <Text style={styles.buttonText}>?</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -140,9 +184,23 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
   },
+  helpButtonContainer: {
+    position: 'absolute',
+    bottom: Dimensions.get('window').height * 0.05,
+    left: 0,
+    right: 0,
+    margin: 10,
+    alignItems: 'flex-end',
+  },
   button: {
     backgroundColor: '#1ba5c4',
     width: Dimensions.get('window').width * 0.5,
+    padding: 10,
+    borderRadius: 20,
+  },
+  helpButton: {
+    backgroundColor: '#1ba5c4',
+    width: Dimensions.get('window').width * 0.1,
     padding: 10,
     borderRadius: 20,
   },
