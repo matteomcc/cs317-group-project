@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, View, Text, Button, Alert, Dimensions, TouchableOpacity, Image } from 'react-native';
-import MapView, { Marker, AnimatedRegion, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
+import { SafeAreaView, StyleSheet, View, Text, Alert, Dimensions, TouchableOpacity } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 
 const LATITUDE_DELTA = 0.0001;
@@ -11,19 +11,17 @@ function RunningScreen() {
   const [startStop, setStartStop] = useState("Start Run");
   const [timer, setTimer] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
-  const [distance, setDis] = useState(0);
   const [LATITUDE, setLAT] = useState(39.0973);
   const [LONGITUDE, setLONG] = useState(-82.9860);
   const [startLAT, setSLAT] = useState(null);
   const [startLONG, setSLONG] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
   const [locationInterval, setLocationInterval] = useState(null);
 
   const handleButtonPress = async () => {
     if (startStop === "Start Run") {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
+        Alert.alert('Permission to access location was denied');
         return;
       }
       let location = await Location.getCurrentPositionAsync({});
@@ -84,21 +82,21 @@ function RunningScreen() {
   };
 
   //code in calculateDistance sourced from https://www.movable-type.co.uk/scripts/latlong.html
-function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371e3; // metres
-  const φ1 = lat1 * Math.PI / 180; // φ, λ in radians
-  const φ2 = lat2 * Math.PI / 180;
-  const Δφ = (lat2 - lat1) * Math.PI / 180;
-  const Δλ = (lon2 - lon1) * Math.PI / 180;
+  function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371e3; // metres
+    const φ1 = lat1 * Math.PI / 180; // φ, λ in radians
+    const φ2 = lat2 * Math.PI / 180;
+    const Δφ = (lat2 - lat1) * Math.PI / 180;
+    const Δλ = (lon2 - lon1) * Math.PI / 180;
 
-  const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-      Math.cos(φ1) * Math.cos(φ2) *
-      Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+        Math.cos(φ1) * Math.cos(φ2) *
+        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-  const d = (R * c)/1000; // in metres
-  return d;
-}
+    const d = (R * c)/1000; // in metres
+    return d;
+  }
 
 
   useEffect(() => {
