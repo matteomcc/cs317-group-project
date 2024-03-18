@@ -1,0 +1,21 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.adam1136.test">
+    
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <!-- Your application components here -->
+        <!-- Remember to replace "YOUR_API_KEY" with your actual API key -->
+        <meta-data
+          android:name="com.google.android.geo.API_KEY"
+          android:value="AIzaSyAgt-YZ4V432NEtL6M0ylS0MnufC_ZqaPM"/>
+        
+        <!-- Other components... -->
+    </application>
+</manifest>
