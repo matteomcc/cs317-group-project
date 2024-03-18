@@ -1,11 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, Image, Button, TextInput} from 'react-native';
+import {Text, View, Image, Button, TextInput, Stylesheet} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dimensions from 'react-native/Libraries/Utilities/Dimensions';
+import { useDarkMode } from './DarkModeContext';
+import { useLargeText } from './LargeTextContext';
 
 const ProfileScreen = (props) => {
+    const { isDark } = useDarkMode();
+    const { isLargeText } = useLargeText();
     const [image, setImage] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState('');
@@ -91,7 +95,7 @@ const ProfileScreen = (props) => {
 
     };
     return (
-        <View>
+        <View style={styles.container}>
 
             <Text style={styles.heading}>Manage your profile</Text>
 
@@ -173,14 +177,6 @@ const ProfileScreen = (props) => {
 };
 
 const styles = {
-    heading: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 10,
-        marginHorizontal: 10,
-
-    },
-
     detail: {
         marginHorizontal : 10,
         fontSize: 18,
@@ -196,6 +192,26 @@ const styles = {
         width: Dimensions.get('window').width * 0.4,
         marginVertical: 10,
         alignSelf: 'center',
+    },
+  container: {
+      flex: 1,
+      justifyContent: 'top',
+      backgroundColor: isDark ? '#191919' : '#fff',
+    },
+    text: {
+      color: isDark ? '#fff' : '#000',
+      fontSize: isLargeText ? 24 : 18,
+      marginBottom: 5,
+      marginHorizontal: 5,
+      textAlign:'left'
+    },
+    heading: {
+      color: isDark ? '#fff' : '#000',
+      fontSize: isLargeText ? 40 : 24,
+      marginBottom: 10,
+      marginHorizontal: 10,
+      textAlign:'center'
+      fontWeight: 'bold',
     },
 };
 

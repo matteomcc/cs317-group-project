@@ -1,10 +1,14 @@
 import * as React from 'react';
-import {Text, View, Button,  TextInput} from 'react-native';
+import {Text, View, Button,  TextInput, Stylesheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDarkMode } from './DarkModeContext';
+import { useLargeText } from './LargeTextContext';
 
 function WeightsScreen() {
+    const { isDark } = useDarkMode();
+    const { isLargeText } = useLargeText();
     const [exercise, setExercise] = useState('0');
     const [num, setNum] = useState(0);
     const [day, setDay] = useState(0);
@@ -121,7 +125,7 @@ function WeightsScreen() {
     }
 
     return (
-        <View>
+        <View style={styles.container}>
             <View style={{ flexDirection: 'row', marginLeft: 20, justifyContent: 'space-evenly' }}>
                 <Button title="<" onPress={lClickMe} />
                 <Text style={{ marginTop: 5 }}>{myArray[day][0]}</Text>
@@ -155,5 +159,28 @@ function WeightsScreen() {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'top',
+      backgroundColor: isDark ? '#191919' : '#fff',
+    },
+    text: {
+      color: isDark ? '#fff' : '#000',
+      fontSize: isLargeText ? 24 : 18,
+      marginBottom: 5,
+      marginHorizontal: 5,
+      textAlign:'left'
+    },
+    heading: {
+      color: isDark ? '#fff' : '#000',
+      fontSize: isLargeText ? 40 : 24,
+      marginBottom: 10,
+      marginHorizontal: 10,
+      textAlign:'center'
+    }
+  });
+
 
 export default WeightsScreen;

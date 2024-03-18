@@ -1,7 +1,9 @@
 import React, {useEffect} from 'react';
-import {Image, View} from 'react-native';
-import {createDrawerNavigator, DrawerContentScrollView, DrawerItemList} from '@react-navigation/drawer';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, View, Image } from 'react-native';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
+import React from 'react';
 
 // Import screens
 import HomeScreen from './screens/Home';
@@ -9,6 +11,9 @@ import ProfileScreen from './screens/Profile';
 import RunningScreen from './screens/Running';
 import WeightsScreen from './screens/Weights';
 import SettingsScreen from './screens/Settings';
+
+import { DarkModeProvider } from './screens/DarkModeContext';
+import { LargeTextProvider } from './screens/LargeTextContext';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Drawer = createDrawerNavigator();
@@ -24,6 +29,23 @@ const CustomDrawerContent = ({ profileImageUri, ...props }) => (
 
 
 export default function App() {
+  return (
+      <DarkModeProvider>
+        <LargeTextProvider>
+          <NavigationContainer>
+            <Drawer.Navigator initialRouteName="Home">
+              <Drawer.Screen name="Home" component={HomeScreen} />
+              <Drawer.Screen name="Profile" component={ProfileScreen} />
+              <Drawer.Screen name="Running" component={RunningScreen} />
+              <Drawer.Screen name="Weights" component={WeightsScreen} />
+              <Drawer.Screen name="Settings" component={SettingsScreen} />
+            </Drawer.Navigator>
+            <StatusBar style="auto" />
+          </NavigationContainer>
+        </LargeTextProvider>
+      </DarkModeProvider>
+  );
+}
     const [profileImageUri, setProfileImageUri] = React.useState(null);
 
     useEffect(() => {
@@ -42,6 +64,8 @@ export default function App() {
         }
     }
     return (
+      <DarkModeProvider>
+        <LargeTextProvider>
         <NavigationContainer>
             <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <CustomDrawerContent {...props} profileImageUri={profileImageUri} />}>
                 <Drawer.Screen
@@ -107,5 +131,7 @@ export default function App() {
                 />
             </Drawer.Navigator>
         </NavigationContainer>
+      </LargeTextProvider>
+      </DarkModeProvider>
     );
 }

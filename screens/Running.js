@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, View, Text, Alert, Dimensions, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
+import { useDarkMode } from './DarkModeContext';
+import { useLargeText } from './LargeTextContext';
 
 const LATITUDE_DELTA = 0.0001;
 const LONGITUDE_DELTA = 0.0001;
 
 function RunningScreen() {
+  const { isDark } = useDarkMode();
+  const { isLargeText } = useLargeText();
   const [showStats, setStats] = useState(false);
   const [startStop, setStartStop] = useState("Start Run");
   const [timer, setTimer] = useState(null);
@@ -104,6 +108,7 @@ function RunningScreen() {
   }, []);
 
   return (
+    <View style={styles.container>
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.mapContainer}>
         <MapView
@@ -149,6 +154,7 @@ function RunningScreen() {
         </TouchableOpacity>
       </View>
     </SafeAreaView>
+  </View>
   );
 };
 
@@ -216,6 +222,25 @@ const styles = StyleSheet.create({
   },
   statsText: {
     fontSize: 16,
-  }
+  },
+  container: {
+      flex: 1,
+      justifyContent: 'top',
+      backgroundColor: isDark ? '#191919' : '#fff',
+    },
+    text: {
+      color: isDark ? '#fff' : '#000',
+      fontSize: isLargeText ? 24 : 18,
+      marginBottom: 5,
+      marginHorizontal: 5,
+      textAlign:'left'
+    },
+    heading: {
+      color: isDark ? '#fff' : '#000',
+      fontSize: isLargeText ? 40 : 24,
+      marginBottom: 10,
+      marginHorizontal: 10,
+      textAlign:'center'
+    }
 });
 
