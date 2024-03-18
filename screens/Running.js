@@ -5,10 +5,8 @@ import * as Location from 'expo-location';
 import { useDarkMode } from './DarkModeContext';
 import { useLargeText } from './LargeTextContext';
 
-const LATITUDE_DELTA = 0.0001;
-const LONGITUDE_DELTA = 0.0001;
-
-function RunningScreen() {
+//initialise variables
+const RunningScreen = () => {
   const { isDark } = useDarkMode();
   const { isLargeText } = useLargeText();
   const [showStats, setStats] = useState(false);
@@ -21,6 +19,7 @@ function RunningScreen() {
   const [startLONG, setSLONG] = useState(null);
   const [locationInterval, setLocationInterval] = useState(null);
 
+  //styles
   const styles = StyleSheet.create({
    mapContainer: {
      position: 'absolute',
@@ -105,30 +104,38 @@ function RunningScreen() {
      }
  });
 
+  //code ran when the start button is pressed, which starts or stops the times depending on the current state
   const handleButtonPress = async () => {
     if (startStop === "Start Run") {
+      //request location permission
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         Alert.alert('Permission to access location was denied');
         return;
       }
+      //get location
       let location = await Location.getCurrentPositionAsync({});
+      //set latitude and longitude to current location
       setLAT(location.coords.latitude);
       setLONG(location.coords.longitude);
+      //set starting latitude and longitude to current location
       setSLAT(location.coords.latitude);
       setSLONG(location.coords.longitude);
       setStartStop("Stop Run");
+      //displays time
       setStats(true);
       startTimer();
     } else {
       setStartStop("Start Run");
       setStats(false);
       stopTimer();
+      //get current location and use it and the starting location to calculate the distance between the two points, side note: would have liked a far more detailed distance tracker but unfortunately due to the asynchronous nature of react variables it simply would not work
       let location = await Location.getCurrentPositionAsync({});
       let distance = calculateDistance(startLAT, startLONG, location.coords.latitude, location.coords.longitude);
+      //sends an alert to the user upon completion of the run
       Alert.alert(
         'Run Completed',
-        `Time: ${Math.floor(elapsedTime / 60).toFixed(0)} mins ${Math.floor(elapsedTime % 60).toFixed(0)} secs\nDistance between your start point and end point: ${distance.toFixed(2)} km`,
+        `Time: ${Math.floor(elapsedTime / 60).toFixed(0)} mins ${Math.floor(elapsedTime % 60).toFixed(0)} secs\nDistance between your start point and end point: ${(distance/1000).toFixed(2)} km`,
         [
           { text: 'OK', onPress: () => console.log('OK Pressed') }
         ],
@@ -137,6 +144,8 @@ function RunningScreen() {
     }
   };
 
+
+  //code ran when help button is clicked
   const help = () => {
     Alert.alert(
       'Help',
@@ -148,6 +157,7 @@ function RunningScreen() {
     );
   }
 
+  //starts a timer which increments every second
   const startTimer = () => {
     const interval = setInterval(() => {
       setElapsedTime(prevElapsedTime => prevElapsedTime + 1);
@@ -191,20 +201,23 @@ function RunningScreen() {
     return () => clearInterval(timer);
   }, []);
 
+  //display the map, buttons and stats which will appear on screen
   return (
     <View style={styles.container}>
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.mapContainer}>
         <MapView
           style={styles.mapStyle}
+          //region the map will appear in, latitude and longitude are constantly updating when in a run, latitude delta and longitude delta are a constant 0.0001
           region={{
             latitude: LATITUDE,
             longitude: LONGITUDE,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
+            latitudeDelta: 0.0001,
+            longitudeDelta: 0.0001,
           }}
         >
           <Marker
+          //generates marker that represents the user
             draggable
             coordinate={{
               latitude: LATITUDE,
@@ -218,6 +231,7 @@ function RunningScreen() {
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
+          //start run button
           onPress={handleButtonPress}
           style={styles.button}
         >
@@ -225,12 +239,14 @@ function RunningScreen() {
         </TouchableOpacity>
       </View>
       {showStats && (
+        //time, only displays when in run
         <View style={styles.statsContainer}>
           <Text style={styles.statsText}>Time: {Math.floor(elapsedTime / 60).toFixed(0)} mins {Math.floor(elapsedTime % 60).toFixed(0)} secs</Text>
         </View>
       )}
       <View style={styles.helpButtonContainer}>
         <TouchableOpacity
+          //help button
           onPress={help}
           style={styles.helpButton}
         >

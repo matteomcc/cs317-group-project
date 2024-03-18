@@ -17,10 +17,6 @@ const ProfileScreen = (props) => {
     const [pronoun, setPronouns] = useState('');
 
     const styles = {
-        detail: {
-            marginHorizontal : 10,
-            fontSize: 18,
-        },
         profileImage: {
             width: 100,
             height: 100,
@@ -159,6 +155,11 @@ const ProfileScreen = (props) => {
                         borderWidth: 1,
                         padding: 10,
                         marginHorizontal: 10,
+                        color: isDark ? '#fff' : '#000',
+                        fontSize: isLargeText ? 24 : 18,
+                        marginBottom: 5,
+                        marginHorizontal: 5,
+                        textAlign:'left',
                     }}
                     placeholder="Name"
                     value={name}
@@ -166,7 +167,7 @@ const ProfileScreen = (props) => {
                 />
 
             ) : (
-                <Text style={styles.detail}>Name: {name}</Text>
+                <Text style={styles.text}>Name: {name}</Text>
             )}
             {isEditing ? (
                 <TextInput
@@ -177,6 +178,11 @@ const ProfileScreen = (props) => {
                         padding: 10,
                         marginHorizontal: 10,
                         marginVertical: 10,
+                        color: isDark ? '#fff' : '#000',
+                        fontSize: isLargeText ? 24 : 18,
+                        marginBottom: 5,
+                        marginHorizontal: 5,
+                        textAlign:'left',
                     }}
                     placeholder="Email"
                     value={email}
@@ -184,10 +190,11 @@ const ProfileScreen = (props) => {
                 />
 
             ) : (
-                <Text style={styles.detail}>Email: {email}</Text>
+                <Text style={styles.text}>Email: {email}</Text>
             )}
             {isEditing ? (
                 <Picker
+                    style={styles.text}
                     selectedValue={pronoun}
                     onValueChange={(itemValue) => setPronouns(itemValue)}>
 
@@ -200,7 +207,7 @@ const ProfileScreen = (props) => {
 
                 </Picker>
             ) : (
-                <Text style={styles.detail}>Pronouns: {pronoun}</Text>
+                <Text style={styles.text}>Pronouns: {pronoun}</Text>
             )}
 
 

@@ -1,12 +1,12 @@
 import * as React from 'react';
-import {Text, View, Button,  TextInput, Stylesheet } from 'react-native';
+import {Text, View, Button,  TextInput, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDarkMode } from './DarkModeContext';
 import { useLargeText } from './LargeTextContext';
 
-function WeightsScreen() {
+const WeightsScreen = () => {
     const { isDark } = useDarkMode();
     const { isLargeText } = useLargeText();
     const [exercise, setExercise] = useState('0');
@@ -150,12 +150,19 @@ function WeightsScreen() {
         <View style={styles.container}>
             <View style={{ flexDirection: 'row', marginLeft: 20, justifyContent: 'space-evenly' }}>
                 <Button title="<" onPress={lClickMe} />
-                <Text style={{ marginTop: 5 }}>{myArray[day][0]}</Text>
+                <Text style={{ marginTop: 5,  
+                                color: isDark ? '#fff' : '#000',
+                                fontSize: isLargeText ? 24 : 18,
+                                marginBottom: 5,
+                                marginHorizontal: 5,
+                                textAlign:'left'
+                }}>{myArray[day][0]}</Text>
                 <Button title=">" onPress={rClickMe} />
             </View>
             <View style={{ marginHorizontal: '30%' }}>
 
                 <Picker
+                    style = {styles.text}
                     selectedValue={exercise}
                     onValueChange={(itemValue, itemIndex) => setExercise(itemValue)}>
 
@@ -170,16 +177,21 @@ function WeightsScreen() {
                         <TextInput
                             value={myArray[day][item][1].toString()}
                             onChangeText={(text) => editWeight(item, parseInt(text))}
-                            style={{width:50}}
+                            style={{width:50,  
+                                color: isDark ? '#fff' : '#000',
+                                fontSize: isLargeText ? 24 : 18,
+                                marginBottom: 5,
+                                marginHorizontal: 5,
+                                textAlign:'left'}}
                             keyboardType={'numeric'}
                         />
-                        <Text>{myArray[day][item][1] + "kg " +  myArray[day][item][0]}</Text>
+                        <Text style = {styles.text}>{myArray[day][item][1] + "kg " +  myArray[day][item][0]}</Text>
                         <Button onPress={() => remExer(item)} title="-" />
                     </View>
                 ))}
             </View>
         </View>
     );
-}
+};
 
 export default WeightsScreen;
