@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
 import { useDarkMode } from './DarkModeContext';
-import { useAutoBright } from './AutoBrightContext';
+import { useLargeText } from './LargeTextContext';
 
 const SettingsScreen = () => {
   const { isDark, setIsDark } = useDarkMode();
-  const { isAutoBright, setAutoBright } = useAutoBright();
+  const { isLargeText, setLargeText } = useLargeText();
 
   const styles = StyleSheet.create({
     container: {
@@ -15,14 +15,14 @@ const SettingsScreen = () => {
     },
     text: {
       color: isDark ? '#fff' : '#000',
-      fontSize: 18,
+      fontSize: isLargeText ? 24 : 18,
       marginBottom: 5,
       marginHorizontal: 5,
       textAlign:'left'
     },
     heading: {
       color: isDark ? '#fff' : '#000',
-      fontSize: 24,
+      fontSize: isLargeText ? 40 : 24,
       marginBottom: 10,
       marginHorizontal: 10,
       textAlign:'center'
@@ -43,9 +43,9 @@ const SettingsScreen = () => {
         backgroundInactive={'gray'}
         circleActiveColor={'#30a566'}
         circleInActiveColor={'#000000'}/>
-      <Text style={styles.text}>Enable Automatic Brightness for Running Screen</Text>
-      <Switch value={isAutoBright}
-        onValueChange={() => setAutoBright(!isAutoBright)}
+      <Text style={styles.text}>Enable Larger Text Size</Text>
+      <Switch value={isLargeText}
+        onValueChange={() => setLargeText(!isLargeText)}
         activeText={'On'}
         inActiveText={'Off'}
         backgroundActive={'green'}

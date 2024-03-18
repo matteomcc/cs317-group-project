@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useDarkMode } from './DarkModeContext';
+import { useLargeText } from './LargeTextContext'
 
 const HomeScreen = () => {
   const { isDark } = useDarkMode();
+  const { isLargeText } = useLargeText();
 
   const styles = StyleSheet.create({
     container: {
@@ -13,14 +15,14 @@ const HomeScreen = () => {
     },
     text: {
       color: isDark ? '#fff' : '#000',
-      fontSize: 18,
+      fontSize: isLargeText ? 24 : 18,
       marginBottom: 5,
       marginHorizontal: 5,
       textAlign:'left'
     },
     heading: {
       color: isDark ? '#fff' : '#000',
-      fontSize: 24,
+      fontSize: isLargeText ? 40 : 24,
       marginBottom: 10,
       marginHorizontal: 10,
       textAlign:'center'
