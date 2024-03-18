@@ -16,6 +16,45 @@ const ProfileScreen = (props) => {
     const [email, setEmail] = useState('');
     const [pronoun, setPronouns] = useState('');
 
+    const styles = {
+        detail: {
+            marginHorizontal : 10,
+            fontSize: 18,
+        },
+        profileImage: {
+            width: 100,
+            height: 100,
+            borderRadius: 50,
+            marginVertical: 10,
+            alignSelf: 'center',
+        },
+        profileInfo: {
+            width: Dimensions.get('window').width * 0.4,
+            marginVertical: 10,
+            alignSelf: 'center',
+        },
+      container: {
+          flex: 1,
+          justifyContent: 'top',
+          backgroundColor: isDark ? '#191919' : '#fff',
+        },
+        text: {
+          color: isDark ? '#fff' : '#000',
+          fontSize: isLargeText ? 24 : 18,
+          marginBottom: 5,
+          marginHorizontal: 5,
+          textAlign:'left'
+        },
+        heading: {
+          color: isDark ? '#fff' : '#000',
+          fontSize: isLargeText ? 40 : 24,
+          marginBottom: 10,
+          marginHorizontal: 10,
+          textAlign:'center',
+          fontWeight: 'bold',
+        },
+    };
+
     useEffect(() => {
 
         getData();
@@ -174,45 +213,6 @@ const ProfileScreen = (props) => {
             </View>
         </View>
     );
-};
-
-const styles = {
-    detail: {
-        marginHorizontal : 10,
-        fontSize: 18,
-    },
-    profileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        marginVertical: 10,
-        alignSelf: 'center',
-    },
-    profileInfo: {
-        width: Dimensions.get('window').width * 0.4,
-        marginVertical: 10,
-        alignSelf: 'center',
-    },
-  container: {
-      flex: 1,
-      justifyContent: 'top',
-      backgroundColor: isDark ? '#191919' : '#fff',
-    },
-    text: {
-      color: isDark ? '#fff' : '#000',
-      fontSize: isLargeText ? 24 : 18,
-      marginBottom: 5,
-      marginHorizontal: 5,
-      textAlign:'left'
-    },
-    heading: {
-      color: isDark ? '#fff' : '#000',
-      fontSize: isLargeText ? 40 : 24,
-      marginBottom: 10,
-      marginHorizontal: 10,
-      textAlign:'center'
-      fontWeight: 'bold',
-    },
 };
 
 export default ProfileScreen;

@@ -22,6 +22,28 @@ function WeightsScreen() {
         ['SAT', ['', 0], ['', 0], ['', 0], ['', 0], ['', 0]]
     ]);
 
+    const styles = StyleSheet.create({
+        container: {
+          flex: 1,
+          justifyContent: 'top',
+          backgroundColor: isDark ? '#191919' : '#fff',
+        },
+        text: {
+          color: isDark ? '#fff' : '#000',
+          fontSize: isLargeText ? 24 : 18,
+          marginBottom: 5,
+          marginHorizontal: 5,
+          textAlign:'left'
+        },
+        heading: {
+          color: isDark ? '#fff' : '#000',
+          fontSize: isLargeText ? 40 : 24,
+          marginBottom: 10,
+          marginHorizontal: 10,
+          textAlign:'center'
+        }
+      });
+
     useEffect(() => {
         getData();
     }, []);
@@ -159,28 +181,5 @@ function WeightsScreen() {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'top',
-      backgroundColor: isDark ? '#191919' : '#fff',
-    },
-    text: {
-      color: isDark ? '#fff' : '#000',
-      fontSize: isLargeText ? 24 : 18,
-      marginBottom: 5,
-      marginHorizontal: 5,
-      textAlign:'left'
-    },
-    heading: {
-      color: isDark ? '#fff' : '#000',
-      fontSize: isLargeText ? 40 : 24,
-      marginBottom: 10,
-      marginHorizontal: 10,
-      textAlign:'center'
-    }
-  });
-
 
 export default WeightsScreen;

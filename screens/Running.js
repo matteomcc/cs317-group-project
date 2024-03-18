@@ -21,6 +21,90 @@ function RunningScreen() {
   const [startLONG, setSLONG] = useState(null);
   const [locationInterval, setLocationInterval] = useState(null);
 
+  const styles = StyleSheet.create({
+   mapContainer: {
+     position: 'absolute',
+     top: 0,
+     left: 0,
+     right: 0,
+     bottom: 0,
+     borderColor: 'black', 
+     borderWidth: 1,
+     height: Dimensions.get('window').height * 0.5,
+     margin: 10,
+     alignItems: 'center',
+     justifyContent: 'flex-end',
+   },
+   mapStyle: {
+     position: 'absolute',
+     top: 0,
+     left: 0,
+     right: 0,
+     bottom: 0,
+   },
+   buttonContainer: {
+     position: 'absolute',
+     bottom: Dimensions.get('window').height * 0.3,
+     left: 0,
+     right: 0,
+     alignItems: 'center',
+   },
+   helpButtonContainer: {
+     position: 'absolute',
+     bottom: Dimensions.get('window').height * 0.05,
+     left: 0,
+     right: 0,
+     margin: 10,
+     alignItems: 'flex-end',
+   },
+   button: {
+     backgroundColor: '#1ba5c4',
+     width: Dimensions.get('window').width * 0.5,
+     padding: 10,
+     borderRadius: 20,
+   },
+   helpButton: {
+     backgroundColor: '#1ba5c4',
+     width: Dimensions.get('window').width * 0.1,
+     padding: 10,
+     borderRadius: 20,
+   },
+   buttonText: {
+     color: 'white',
+     textAlign: 'center',
+     fontSize: 16,
+   },
+   statsContainer: {
+     position: 'absolute',
+     bottom: Dimensions.get('window').height * 0.2,
+     left: 0,
+     right: 0,
+     alignItems: 'center',
+   },
+   statsText: {
+     fontSize: 16,
+   },
+   container: {
+       flex: 1,
+       justifyContent: 'top',
+       backgroundColor: isDark ? '#191919' : '#fff',
+     },
+     text: {
+       color: isDark ? '#fff' : '#000',
+       fontSize: isLargeText ? 24 : 18,
+       marginBottom: 5,
+       marginHorizontal: 5,
+       textAlign:'left'
+     },
+     heading: {
+       color: isDark ? '#fff' : '#000',
+       fontSize: isLargeText ? 40 : 24,
+       marginBottom: 10,
+       marginHorizontal: 10,
+       textAlign:'center'
+     }
+ });
+
   const handleButtonPress = async () => {
     if (startStop === "Start Run") {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -108,7 +192,7 @@ function RunningScreen() {
   }, []);
 
   return (
-    <View style={styles.container>
+    <View style={styles.container}>
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.mapContainer}>
         <MapView
@@ -159,88 +243,3 @@ function RunningScreen() {
 };
 
 export default RunningScreen;
-//styles
-const styles = StyleSheet.create({
-  mapContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    borderColor: 'black', 
-    borderWidth: 1,
-    height: Dimensions.get('window').height * 0.5,
-    margin: 10,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  mapStyle: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: Dimensions.get('window').height * 0.3,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-  },
-  helpButtonContainer: {
-    position: 'absolute',
-    bottom: Dimensions.get('window').height * 0.05,
-    left: 0,
-    right: 0,
-    margin: 10,
-    alignItems: 'flex-end',
-  },
-  button: {
-    backgroundColor: '#1ba5c4',
-    width: Dimensions.get('window').width * 0.5,
-    padding: 10,
-    borderRadius: 20,
-  },
-  helpButton: {
-    backgroundColor: '#1ba5c4',
-    width: Dimensions.get('window').width * 0.1,
-    padding: 10,
-    borderRadius: 20,
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 16,
-  },
-  statsContainer: {
-    position: 'absolute',
-    bottom: Dimensions.get('window').height * 0.2,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-  },
-  statsText: {
-    fontSize: 16,
-  },
-  container: {
-      flex: 1,
-      justifyContent: 'top',
-      backgroundColor: isDark ? '#191919' : '#fff',
-    },
-    text: {
-      color: isDark ? '#fff' : '#000',
-      fontSize: isLargeText ? 24 : 18,
-      marginBottom: 5,
-      marginHorizontal: 5,
-      textAlign:'left'
-    },
-    heading: {
-      color: isDark ? '#fff' : '#000',
-      fontSize: isLargeText ? 40 : 24,
-      marginBottom: 10,
-      marginHorizontal: 10,
-      textAlign:'center'
-    }
-});
-
