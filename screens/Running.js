@@ -20,6 +20,88 @@ const RunningScreen = () => {
   const [locationInterval, setLocationInterval] = useState(null);
 
   //styles
+  //dark mode style taken from https://developers.google.com/maps/documentation/javascript/examples/style-selector
+  const mapStyle = isDark ? [
+    {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+    {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+    {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+    {
+      featureType: 'administrative.locality',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#d59563'}],
+    },
+    {
+      featureType: 'poi',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#d59563'}],
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'geometry',
+      stylers: [{color: '#263c3f'}],
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#6b9a76'}],
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry',
+      stylers: [{color: '#38414e'}],
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry.stroke',
+      stylers: [{color: '#212a37'}],
+    },
+    {
+      featureType: 'road',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#9ca5b3'}],
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'geometry',
+      stylers: [{color: '#746855'}],
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'geometry.stroke',
+      stylers: [{color: '#1f2835'}],
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#f3d19c'}],
+    },
+    {
+      featureType: 'transit',
+      elementType: 'geometry',
+      stylers: [{color: '#2f3948'}],
+    },
+    {
+      featureType: 'transit.station',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#d59563'}],
+    },
+    {
+      featureType: 'water',
+      elementType: 'geometry',
+      stylers: [{color: '#17263c'}],
+    },
+    {
+      featureType: 'water',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#515c6d'}],
+    },
+    {
+      featureType: 'water',
+      elementType: 'labels.text.stroke',
+      stylers: [{color: '#17263c'}],
+    },
+  ] : [];
+
   const styles = StyleSheet.create({
    mapContainer: {
      position: 'absolute',
@@ -27,7 +109,8 @@ const RunningScreen = () => {
      left: 0,
      right: 0,
      bottom: 0,
-     borderColor: 'black', 
+     borderColor: isDark ? '#fff' : '#000', 
+     borderStyle: 'dashed',
      borderWidth: 1,
      height: Dimensions.get('window').height * 0.5,
      margin: 10,
@@ -43,7 +126,7 @@ const RunningScreen = () => {
    },
    buttonContainer: {
      position: 'absolute',
-     bottom: Dimensions.get('window').height * 0.3,
+     bottom: Dimensions.get('window').height * 0.395,
      left: 0,
      right: 0,
      alignItems: 'center',
@@ -57,6 +140,8 @@ const RunningScreen = () => {
      alignItems: 'flex-end',
    },
    button: {
+    borderColor: isDark ? '#fff' : '#000',
+    borderWidth: 1,
      backgroundColor: '#1ba5c4',
      width: Dimensions.get('window').width * 0.5,
      padding: 10,
@@ -71,7 +156,7 @@ const RunningScreen = () => {
    buttonText: {
      color: 'white',
      textAlign: 'center',
-     fontSize: 16,
+     fontSize: 18,
    },
    statsContainer: {
      position: 'absolute',
@@ -81,7 +166,8 @@ const RunningScreen = () => {
      alignItems: 'center',
    },
    statsText: {
-     fontSize: 16,
+    color: isDark ? '#fff' : '#000',
+    fontSize: isLargeText ? 24 : 18,
    },
    container: {
        flex: 1,
@@ -215,7 +301,7 @@ const RunningScreen = () => {
             latitudeDelta: 0.0001,
             longitudeDelta: 0.0001,
           }}
-        >
+          customMapStyle={mapStyle}>
           <Marker
           //generates marker that represents the user
             draggable
