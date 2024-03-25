@@ -7,7 +7,6 @@ import { NavigationContainer } from '@react-navigation/native';
 // Import screens
 import HomeScreen from './screens/Home';
 import ProfileScreen from './screens/Profile';
-import RunningScreen from './screens/Running';
 import WeightsScreen from './screens/Weights';
 import SettingsScreen from './screens/Settings';
 
@@ -75,18 +74,7 @@ export default function App() {
                     >
                     {() => <ProfileScreen profileImageUri={profileImageUri} setProfileImageUri={setProfileImageUri} />}
                 </Drawer.Screen>
-                <Drawer.Screen
-                    name="Running"
-                    component={RunningScreen}
-                    options={{
-                        drawerIcon: ({ focused, color, size }) => (
-                            <Image
-                                source={require('./assets/shoe.png')}
-                                style={{ width: 24, height: 24 }}
-                            />
-                        ),
-                    }}
-                />
+
                 <Drawer.Screen
                     name="Weights"
                     component={WeightsScreen}
