@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { useDarkMode } from './DarkModeContext';
 import { useLargeText } from './LargeTextContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,55 +8,82 @@ const HomeScreen = () => {
   const { isDark } = useDarkMode();
   const { isLargeText } = useLargeText();
   const [name, setName] = useState('');
-  const [lastWorkoutDay, setLastWorkoutDay] = useState('');
-  const [benchPressWeight, setBenchPressWeight] = useState(0);
-  const [deadliftWeight, setDeadliftWeight] = useState(0);
-  const [squatWeight, setSquatWeight] = useState(0);
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: isDark ? '#191919' : '#fff',
-    },
-    text: {
-      color: isDark ? '#fff' : '#000',
-      fontSize: isLargeText ? 24 : 18,
-      marginBottom: 10,
-      textAlign: 'center',
-    },
+  const [workoutData, setWorkoutData] = useState({
+    benchPress: 0,
+    deadlift: 0,
+    squat: 0
   });
+  const [currentDay, setCurrentDay] = useState('');
 
   useEffect(() => {
+    getCurrentDay();
     getData();
   }, []);
+
+  const getCurrentDay = () => {
+    const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    const currentDate = new Date();
+    const currentDayIndex = currentDate.getDay();
+    setCurrentDay(days[currentDayIndex]);
+  };
 
   const getData = async () => {
     try {
       const storedName = await AsyncStorage.getItem('name');
-      const storedLastWorkoutDay = await AsyncStorage.getItem('lastWorkoutDay');
-      const storedBenchPressWeight = await AsyncStorage.getItem('benchPressWeight');
-      const storedDeadliftWeight = await AsyncStorage.getItem('deadliftWeight');
-      const storedSquatWeight = await AsyncStorage.getItem('squatWeight');
-
-      if (storedName) {setName(storedName)};
-      if (storedLastWorkoutDay) {setLastWorkoutDay(storedLastWorkoutDay)}
-      if (storedBenchPressWeight) {setBenchPressWeight(parseInt(storedBenchPressWeight))};
-      if (storedDeadliftWeight) {setDeadliftWeight(parseInt(storedDeadliftWeight))};
-      if (storedSquatWeight) {setSquatWeight(parseInt(storedSquatWeight))};
+      const storedWorkoutData = await AsyncStorage.getItem(currentDay.toLowerCase());
+      if (storedName) setName(storedName);
+      if (storedWorkoutData) setWorkoutData(JSON.parse(storedWorkoutData));
     } catch (error) {
       console.error('Error retrieving data:', error);
     }
   };
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#f7f7f7',
+      alignItems: 'center',
+      padding: 20,
+    },
+    header: {
+      marginTop: 20,
+      marginBottom: 20,
+    },
+    headerText: {
+      fontSize: 24,
+      fontWeight: 'bold',
+    },
+    weightImage: {
+      width: 100,
+      height: 100,
+    },
+    subheading: {
+      fontSize: 20,
+      marginTop: 10,
+      marginBottom: 10,
+    },
+    currentDay: {
+      fontSize: 18,
+      marginBottom: 10,
+    },
+    text: {
+      color: '#333',
+      fontSize: 18,
+      marginBottom: 10,
+    },
+  });
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Name: {name}</Text>
-      <Text style={styles.text}>Last Workout Day: {lastWorkoutDay}</Text>
-      <Text style={styles.text}>Bench Press Weight: {benchPressWeight} kg</Text>
-      <Text style={styles.text}>Deadlift Weight: {deadliftWeight} kg</Text>
-      <Text style={styles.text}>Squat Weight: {squatWeight} kg</Text>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>{name}</Text>
+      </View>
+      <Image source={require('./assets/weight.png')} style={styles.weightImage} />
+      <Text style={styles.subheading}>Most Recent Workout</Text>
+      <Text style={styles.currentDay}>{currentDay}</Text>
+      <Text style={styles.text}>Bench Press Weight: {workoutData.benchPress} kg</Text>
+      <Text style={styles.text}>Deadlift Weight: {workoutData.deadlift} kg</Text>
+      <Text style={styles.text}>Squat Weight: {workoutData.squat} kg</Text>
     </View>
   );
 };
