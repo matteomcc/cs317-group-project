@@ -78,7 +78,6 @@ const HomeScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>{name}</Text>
       </View>
-      <Image source={require('./assets/weight.png')} style={styles.weightImage} />
       <Text style={styles.subheading}>Most Recent Workout</Text>
       <Text style={styles.currentDay}>{currentDay}</Text>
       <Text style={styles.text}>Bench Press Weight: {workoutData.benchPress} kg</Text>
