@@ -1,11 +1,41 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDarkMode } from './DarkModeContext';
 import { useLargeText } from './LargeTextContext';
 
 const SettingsScreen = () => {
   const { isDark, setIsDark } = useDarkMode();
   const { isLargeText, setLargeText } = useLargeText();
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  useEffect(() => {
+    saveSettings();
+  }, [isDark, isLargeText]);
+
+  const saveSettings = async () => {
+    try {
+      await AsyncStorage.setItem('settings', JSON.stringify({ isDark, isLargeText }));
+    } catch (error) {
+      console.error('Error saving settings:', error);
+    }
+  };
+
+  const loadSettings = async () => {
+    try {
+      const settings = await AsyncStorage.getItem('settings');
+      if (settings !== null) {
+        const { isDark, isLargeText } = JSON.parse(settings);
+        setIsDark(isDark);
+        setLargeText(isLargeText);
+      }
+    } catch (error) {
+      console.error('Error loading settings:', error);
+    }
+  };
 
   const styles = StyleSheet.create({
     container: {

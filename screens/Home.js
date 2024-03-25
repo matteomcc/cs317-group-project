@@ -1,16 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDarkMode } from './DarkModeContext';
-import { useLargeText } from './LargeTextContext'
+import { useLargeText } from './LargeTextContext';
 
 const HomeScreen = () => {
-  const { isDark } = useDarkMode();
-  const { isLargeText } = useLargeText();
+  const { isDark, setIsDark } = useDarkMode();
+  const { isLargeText, setLargeText } = useLargeText();
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  const loadSettings = async () => {
+    try {
+      const settings = await AsyncStorage.getItem('settings');
+      if (settings !== null) {
+        const { isDark, isLargeText } = JSON.parse(settings);
+        setIsDark(isDark);
+        setLargeText(isLargeText);
+      }
+    } catch (error) {
+      console.error('Error loading home settings:', error);
+    }
+  };
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: 'top',
+      justifyContent: 'center',
+      alignItems: 'center',
       backgroundColor: isDark ? '#191919' : '#fff',
     },
     text: {
