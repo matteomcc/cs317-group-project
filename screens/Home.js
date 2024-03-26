@@ -8,11 +8,7 @@ const HomeScreen = () => {
   const { isDark } = useDarkMode();
   const { isLargeText } = useLargeText();
   const [name, setName] = useState('');
-  const [workoutData, setWorkoutData] = useState({
-    benchPress: 0,
-    deadlift: 0,
-    squat: 0
-  });
+  const [workoutData, setWorkoutData] = useState({});
   const [currentDay, setCurrentDay] = useState('');
 
   useEffect(() => {
@@ -78,11 +74,11 @@ const HomeScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>{name}</Text>
       </View>
+      <Text style={styles.currentDay}>Current Day: {currentDay}</Text>
       <Text style={styles.subheading}>Most Recent Workout</Text>
-      <Text style={styles.currentDay}>{currentDay}</Text>
-      <Text style={styles.text}>Bench Press Weight: {workoutData.benchPress} kg</Text>
-      <Text style={styles.text}>Deadlift Weight: {workoutData.deadlift} kg</Text>
-      <Text style={styles.text}>Squat Weight: {workoutData.squat} kg</Text>
+      {Object.entries(workoutData).map(([exercise, weight]) => (
+        <Text key={exercise} style={styles.text}>{exercise}: {weight} kg</Text>
+      ))}
     </View>
   );
 };
