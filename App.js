@@ -9,6 +9,7 @@ import HomeScreen from './screens/Home';
 import ProfileScreen from './screens/Profile';
 import WeightsScreen from './screens/Weights';
 import SettingsScreen from './screens/Settings';
+import RunningScreen from './screens/Running';
 
 import { DarkModeProvider } from './screens/DarkModeContext';
 import { LargeTextProvider } from './screens/LargeTextContext';

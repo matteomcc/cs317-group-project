@@ -148,7 +148,7 @@ const WeightsScreen = () => {
 
     return (
         <View style={styles.container}>
-            <View style={{ flexDirection: 'row', marginLeft: 20, justifyContent: 'space-evenly' }}>
+            <View style={{ flexDirection: 'row', marginHorizontal: '20%', justifyContent: 'space-evenly' }}>
                 <Button title="<" onPress={lClickMe} />
                 <Text style={{ marginTop: 5,  
                                 color: isDark ? '#fff' : '#000',
@@ -159,7 +159,7 @@ const WeightsScreen = () => {
                 }}>{myArray[day][0]}</Text>
                 <Button title=">" onPress={rClickMe} />
             </View>
-            <View style={{ marginHorizontal: '30%' }}>
+            <View style={{ marginHorizontal: '20%' }}>
 
                 <Picker
                     style = {styles.text}
