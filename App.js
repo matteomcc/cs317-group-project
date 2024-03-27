@@ -26,7 +26,7 @@ const CustomDrawerContent = ({ profileImageUri, ...props }) => (
 );
 
 
-export default function App() {
+const App = () => {
       const [profileImageUri, setProfileImageUri] = React.useState(null);
 
     useEffect(() => {
@@ -44,16 +44,27 @@ export default function App() {
             console.log(e);
         }
     }
+    
+
+
     return (
       <DarkModeProvider>
         <LargeTextProvider>
         <NavigationContainer>
-            <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <CustomDrawerContent {...props} profileImageUri={profileImageUri} />}>
+            <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <CustomDrawerContent {...props} profileImageUri={profileImageUri} />}
+            screenOptions={{
+                drawerStyle: {
+                    backgroundColor: '#ADD8E6',
+                },
+                headerStyle: {
+                    backgroundColor: '#ADD8E6',
+                },
+              }}>
                 <Drawer.Screen
                     name="Home"
                     component={HomeScreen}
                     options={{
-                        drawerIcon: ({ focused, color, size }) => (
+                        drawerIcon: ({}) => (
                             <Image
                                 source={require('./assets/home.png')}
                                 style={{ width: 24, height: 24 }}
@@ -64,7 +75,7 @@ export default function App() {
                 <Drawer.Screen
                     name="Profile"
                     options={{
-                        drawerIcon: ({ focused, color, size }) => (
+                        drawerIcon: ({}) => (
                             <Image
                                 source={require('./assets/profile.png')}
                                 style={{ width: 24, height: 24 }}
@@ -74,12 +85,23 @@ export default function App() {
                     >
                     {() => <ProfileScreen profileImageUri={profileImageUri} setProfileImageUri={setProfileImageUri} />}
                 </Drawer.Screen>
-
+                <Drawer.Screen
+                    name="Running"
+                    component={RunningScreen}
+                    options={{
+                        drawerIcon: ({}) => (
+                            <Image
+                                source={require('./assets/shoe.png')}
+                                style={{ width: 24, height: 24 }}
+                            />
+                        ),
+                    }}
+                />
                 <Drawer.Screen
                     name="Weights"
                     component={WeightsScreen}
                     options={{
-                        drawerIcon: ({ focused, color, size }) => (
+                        drawerIcon: ({}) => (
                             <Image
                                 source={require('./assets/weight.png')}
                                 style={{ width: 24, height: 24 }}
@@ -91,7 +113,7 @@ export default function App() {
                     name="Settings"
                     component={SettingsScreen}
                     options={{
-                        drawerIcon: ({ focused, color, size }) => (
+                        drawerIcon: ({}) => (
                             <Image
                                 source={require('./assets/settings.png')}
                                 style={{ width: 24, height: 24 }}
@@ -105,3 +127,5 @@ export default function App() {
       </DarkModeProvider>
     );
 }
+
+export default App;

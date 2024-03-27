@@ -20,89 +20,185 @@ const RunningScreen = () => {
   const [locationInterval, setLocationInterval] = useState(null);
 
   //styles
+  //dark mode style taken from https://developers.google.com/maps/documentation/javascript/examples/style-selector
+  const mapStyle = isDark ? [
+    {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+    {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+    {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+    {
+      featureType: 'administrative.locality',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#d59563'}],
+    },
+    {
+      featureType: 'poi',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#d59563'}],
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'geometry',
+      stylers: [{color: '#263c3f'}],
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#6b9a76'}],
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry',
+      stylers: [{color: '#38414e'}],
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry.stroke',
+      stylers: [{color: '#212a37'}],
+    },
+    {
+      featureType: 'road',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#9ca5b3'}],
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'geometry',
+      stylers: [{color: '#746855'}],
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'geometry.stroke',
+      stylers: [{color: '#1f2835'}],
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#f3d19c'}],
+    },
+    {
+      featureType: 'transit',
+      elementType: 'geometry',
+      stylers: [{color: '#2f3948'}],
+    },
+    {
+      featureType: 'transit.station',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#d59563'}],
+    },
+    {
+      featureType: 'water',
+      elementType: 'geometry',
+      stylers: [{color: '#17263c'}],
+    },
+    {
+      featureType: 'water',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#515c6d'}],
+    },
+    {
+      featureType: 'water',
+      elementType: 'labels.text.stroke',
+      stylers: [{color: '#17263c'}],
+    },
+  ] : [];
+
   const styles = StyleSheet.create({
-   mapContainer: {
-     position: 'absolute',
-     top: 0,
-     left: 0,
-     right: 0,
-     bottom: 0,
-     borderColor: 'black', 
-     borderWidth: 1,
-     height: Dimensions.get('window').height * 0.5,
-     margin: 10,
-     alignItems: 'center',
-     justifyContent: 'flex-end',
-   },
-   mapStyle: {
-     position: 'absolute',
-     top: 0,
-     left: 0,
-     right: 0,
-     bottom: 0,
-   },
-   buttonContainer: {
-     position: 'absolute',
-     bottom: Dimensions.get('window').height * 0.3,
-     left: 0,
-     right: 0,
-     alignItems: 'center',
-   },
-   helpButtonContainer: {
-     position: 'absolute',
-     bottom: Dimensions.get('window').height * 0.05,
-     left: 0,
-     right: 0,
-     margin: 10,
-     alignItems: 'flex-end',
-   },
-   button: {
-     backgroundColor: '#1ba5c4',
-     width: Dimensions.get('window').width * 0.5,
-     padding: 10,
-     borderRadius: 20,
-   },
-   helpButton: {
-     backgroundColor: '#1ba5c4',
-     width: Dimensions.get('window').width * 0.1,
-     padding: 10,
-     borderRadius: 20,
-   },
-   buttonText: {
-     color: 'white',
-     textAlign: 'center',
-     fontSize: 16,
-   },
-   statsContainer: {
-     position: 'absolute',
-     bottom: Dimensions.get('window').height * 0.2,
-     left: 0,
-     right: 0,
-     alignItems: 'center',
-   },
-   statsText: {
-     fontSize: 16,
-   },
-   container: {
-       flex: 1,
-       justifyContent: 'top',
-       backgroundColor: isDark ? '#191919' : '#fff',
-     },
-     text: {
-       color: isDark ? '#fff' : '#000',
-       fontSize: isLargeText ? 24 : 18,
-       marginBottom: 5,
-       marginHorizontal: 5,
-       textAlign:'left'
-     },
-     heading: {
-       color: isDark ? '#fff' : '#000',
-       fontSize: isLargeText ? 40 : 24,
-       marginBottom: 10,
-       marginHorizontal: 10,
-       textAlign:'center'
-     }
- });
+    mapContainer: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      borderColor: isDark ? '#fff' : '#000', 
+      borderWidth: 1,
+      height: Dimensions.get('window').height * 0.6,
+      margin: 10,
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+    },
+    mapStyle: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+    },
+    buttonContainer: {
+      position: 'absolute',
+      bottom: Dimensions.get('window').height * 0.295,
+      left: 0,
+      right: 0,
+      alignItems: 'center',
+    },
+    helpButtonContainer: {
+      position: 'absolute',
+      bottom: Dimensions.get('window').height * 0.09,
+      left: 0,
+      right: 0,
+      margin: 10,
+      alignItems: 'flex-end',
+    },
+    button: {
+      borderColor: isDark ? '#fff' : '#000',
+      borderWidth: 1,
+      backgroundColor: '#ADD8E6',
+      width: Dimensions.get('window').width * 0.5,
+      padding: 10,
+      borderRadius: 20,
+    },
+    helpButton: {
+      borderColor: isDark ? '#fff' : '#000',
+      borderWidth: 1,
+      backgroundColor: '#ADD8E6',
+      width: Dimensions.get('window').width * 0.1,
+      padding: 10,
+      borderRadius: 20,
+    },
+    buttonText: {
+      color: 'black',
+      textAlign: 'center',
+      fontSize: 18,
+    },
+    statsContainer: {
+      position: 'absolute',
+      width: Dimensions.get('window').width * 0.6,
+      bottom: Dimensions.get('window').height * 0.1,
+      left: '50%', 
+      marginLeft: -Dimensions.get('window').width * 0.3,
+      alignItems: 'center',
+      backgroundColor: '#ADD8E6',
+      borderColor: isDark ? '#fff' : '#000',
+      borderWidth: 1,
+      borderRadius: 10,
+      paddingHorizontal: 20,
+      paddingVertical: 15,
+    
+    },
+    statsText: {
+      color: 'black',
+      fontSize: isLargeText ? 24 : 18,
+    },
+    container: {
+      flex: 1,
+      justifyContent: 'flex-start',
+      backgroundColor: isDark ? '#191919' : '#fff',
+    },
+    text: {
+      color: isDark ? '#fff' : '#000',
+      fontSize: isLargeText ? 24 : 18,
+      marginBottom: 5,
+      marginHorizontal: 5,
+      textAlign: 'left'
+    },
+    heading: {
+      color: isDark ? '#fff' : '#000',
+      fontSize: isLargeText ? 40 : 24,
+      marginBottom: 10,
+      marginHorizontal: 10,
+      textAlign: 'center'
+    }
+  });
+  
 
   //code ran when the start button is pressed, which starts or stops the times depending on the current state
   const handleButtonPress = async () => {
@@ -215,7 +311,7 @@ const RunningScreen = () => {
             latitudeDelta: 0.0001,
             longitudeDelta: 0.0001,
           }}
-        >
+          customMapStyle={mapStyle}>
           <Marker
           //generates marker that represents the user
             draggable
@@ -224,8 +320,6 @@ const RunningScreen = () => {
               longitude: LONGITUDE,
             }}
             onDragEnd={(e) => alert(JSON.stringify(e.nativeEvent.coordinate))}
-            title={'Test Marker'}
-            description={'This is a description of the marker'}
           />
         </MapView>
       </View>
