@@ -228,6 +228,7 @@ const RunningScreen = () => {
       //get current location and use it and the starting location to calculate the distance between the two points, side note: would have liked a far more detailed distance tracker but unfortunately due to the asynchronous nature of react variables it simply would not work
       let location = await Location.getCurrentPositionAsync({});
       let distance = calculateDistance(startLAT, startLONG, location.coords.latitude, location.coords.longitude);
+      console.log(distance);
       //sends an alert to the user upon completion of the run
       Alert.alert(
         'Run Completed',
@@ -288,7 +289,7 @@ const RunningScreen = () => {
         Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    const d = (R * c)/1000; // in metres
+    const d = (R * c); // in metres
     return d;
   }
 
