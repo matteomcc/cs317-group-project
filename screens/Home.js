@@ -8,9 +8,13 @@ const HomeScreen = () => {
   const { isDark } = useDarkMode();
   const { isLargeText } = useLargeText();
   const [name, setName] = useState('');
-  const [workoutData, setWorkoutData] = useState({});
+  const [workoutData, setWorkoutData] = useState({
+    benchPress: 0,
+    deadlift: 0,
+    squat: 0
+  });
   const [currentDay, setCurrentDay] = useState('');
-
+  
   useEffect(() => {
     getCurrentDay();
     getData();
