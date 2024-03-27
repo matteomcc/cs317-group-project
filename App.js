@@ -7,7 +7,6 @@ import { NavigationContainer } from '@react-navigation/native';
 // Import screens
 import HomeScreen from './screens/Home';
 import ProfileScreen from './screens/Profile';
-import RunningScreen from './screens/Running';
 import WeightsScreen from './screens/Weights';
 import SettingsScreen from './screens/Settings';
 
