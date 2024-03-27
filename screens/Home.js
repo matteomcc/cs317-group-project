@@ -1,88 +1,91 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDarkMode } from './DarkModeContext';
 import { useLargeText } from './LargeTextContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Function to get the current day name
+const getCurrentDay = () => {
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const today = new Date().getDay();
+  return days[today];
+};
 
 const HomeScreen = () => {
-  const { isDark } = useDarkMode();
-  const { isLargeText } = useLargeText();
-  const [name, setName] = useState('');
-  const [workoutData, setWorkoutData] = useState({
-    benchPress: 0,
-    deadlift: 0,
-    squat: 0
-  });
-  const [currentDay, setCurrentDay] = useState('');
-  
+  const { isDark, setIsDark } = useDarkMode();
+  const { isLargeText, setLargeText } = useLargeText();
+  const [myArray, setMyArray] = useState([]);
+  const [currentDayData, setCurrentDayData] = useState([]);
+  const [userName, setUserName] = useState('');
+
   useEffect(() => {
-    getCurrentDay();
-    getData();
+    loadUserName();
+    loadWeights();
   }, []);
 
-  const getCurrentDay = () => {
-    const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-    const currentDate = new Date();
-    const currentDayIndex = currentDate.getDay();
-    setCurrentDay(days[currentDayIndex]);
-  };
-
-  const getData = async () => {
+  const loadUserName = async () => {
     try {
-      const storedName = await AsyncStorage.getItem('name');
-      const storedWorkoutData = await AsyncStorage.getItem(currentDay.toLowerCase());
-      if (storedName) setName(storedName);
-      if (storedWorkoutData) setWorkoutData(JSON.parse(storedWorkoutData));
+      const name = await AsyncStorage.getItem('name');
+      if (name !== null) {
+        setUserName(name);
+      }
     } catch (error) {
-      console.error('Error retrieving data:', error);
+      console.error('Error loading user name:', error);
     }
   };
+
+  const loadWeights = async () => {
+    try {
+      const value = await AsyncStorage.getItem('myArray');
+      if (value !== null) {
+        setMyArray(JSON.parse(value));
+      }
+    } catch (error) {
+      console.error('Error loading weights:', error);
+    }
+  };
+
+  useEffect(() => {
+    const currentDayIndex = new Date().getDay();
+    setCurrentDayData(myArray[currentDayIndex] ? myArray[currentDayIndex].slice(1) : []);
+  }, [myArray]);
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#f7f7f7',
+      justifyContent: 'center',
       alignItems: 'center',
-      padding: 20,
-    },
-    header: {
-      marginTop: 20,
-      marginBottom: 20,
-    },
-    headerText: {
-      fontSize: 24,
-      fontWeight: 'bold',
-    },
-    weightImage: {
-      width: 100,
-      height: 100,
-    },
-    subheading: {
-      fontSize: 20,
-      marginTop: 10,
-      marginBottom: 10,
-    },
-    currentDay: {
-      fontSize: 18,
-      marginBottom: 10,
+      backgroundColor: isDark ? '#333' : '#f7f7f7',
     },
     text: {
-      color: '#333',
-      fontSize: 18,
+      color: isDark ? '#fff' : '#333',
+      fontSize: isLargeText ? 24 : 18,
       marginBottom: 10,
+      textAlign: 'center',
+    },
+    heading: {
+      color: isDark ? '#fff' : '#333',
+      fontSize: isLargeText ? 40 : 24,
+      marginBottom: 20,
     },
   });
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>{name}</Text>
+      <Text style={styles.text}>Welcome, {userName}</Text>
+      <Text style={styles.text}>Current Day: {getCurrentDay()}</Text>
+      <Text style={styles.text}>Most Recent Workout</Text>
+      <View>
+        {currentDayData.length > 0 ? (
+          currentDayData.map((exercise, index) => (
+            <Text key={index} style={styles.text}>
+              {exercise[0]}: {exercise[1]}kg
+            </Text>
+          ))
+        ) : (
+          <Text style={styles.text}>No exercises recorded today</Text>
+        )}
       </View>
-      <Text style={styles.currentDay}>Current Day: {currentDay}</Text>
-      <Text style={styles.subheading}>Most Recent Workout</Text>
-      {Object.entries(workoutData).map(([exercise, weight]) => (
-        <Text key={exercise} style={styles.text}>{exercise}: {weight} kg</Text>
-      ))}
     </View>
   );
 };
